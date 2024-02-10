@@ -2,7 +2,7 @@ import pyupbit
 import pandas as pd
 import time
 
-def fetch_data(ticker="KRW-BTC", interval="minute5", count=200, rounds=2):
+def fetch_data(ticker="KRW-BTC", interval="minute5", count=400, rounds=2):
     final_df = pd.DataFrame()
     last_date = None
     for _ in range(rounds):

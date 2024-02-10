@@ -46,12 +46,11 @@ def calculate_rsi(df, periods=14):
 
 def trading_signal(df):
 
-    # 매수 신호: 하한가가 Bollinger Bands의 Lower 밴드 아래에 있을 때
-    df['BuySignal'] = (df['low'] < df['Lower'])
+    # 매수 신호: 하한가가 Bollinger Bands의 Lower 밴드 아래에 있고, RSI가 30 미만일 때
+    df['BuySignal'] = (df['low'] < df['Lower']) & (df['RSI'] < 30)
 
-    # 매도 신호: 상한가가 Bollinger Bands의 Upper 밴드 위에 있을 때
-    df['SellSignal'] = (df['high'] > df['Upper'])
-
+    # 매도 신호: 상한가가 20기간 이동평균(MA)와 Bollinger Bands의 Upper 밴드 중간에 있을 때
+    df['SellSignal'] = (df['high'] > (df['MA'] + df['Upper']) / 2)
 
     return df
 
@@ -82,10 +81,10 @@ def main():
                                 # 손절 기준 추가
                                 or row['low'] < buy_price * 0.99):
             if row['SellSignal']:
-                sell_price = row['Upper']
+                sell_price = (row['MA'] + row['Upper']) / 2
                 win += 1
             else:
-                sell_price = row['low']
+                sell_price = buy_price * 0.995
                 lose += 1
 
             # 매수량 대비 매도량
