@@ -1,5 +1,4 @@
 import pyupbit
-import pandas as pd
 
 def fetch_data(ticker="KRW-BTC", interval="minute5", count=400):
     df = pyupbit.get_ohlcv(ticker, interval=interval, count=count)
